@@ -1,7 +1,10 @@
 import { useState } from 'react';
-import reactLogo from './assets/react.svg';
-import viteLogo from '/vite.svg';
 import './App.css';
+import Letter from './components/Letter';
+import TimeCounter from './components/TimeCounter';
+import GuessCounter from './components/GuessCounter';
+import GuessInput from './components/GuessInput';
+import WordLength from './components/WordLength';
 
 function App() {
   const [count, setCount] = useState(0);
@@ -16,26 +19,25 @@ function App() {
         secret word is randomized based of the number of letter you choose and
         as soon as you pick a new word, the timer will start
       </p>
-      <div className='card'>
+      <div>
         <p>The number of letters in the word</p>
         <div>
-          <button onChange={() => setCount((count) => count)}>{count}</button>
+          <WordLength />
+          <button>Start</button>
         </div>
-        <button onClick={() => setCount((count) => count - 1)}>-</button>
-        <button onClick={() => setCount((count) => count + 1)}>+</button>
-        <button>Start</button>
-
-        <div>Time: 00:00</div>
-        <div>Guess: 0</div>
-        <div></div>
         <div>
-          <button>_</button>
-          <button>_</button>
-          <button>_</button>
-          <button>_</button>
-          <button>_</button>
+          <Letter />
+          <Letter />
+          <Letter />
+          <Letter />
+          <Letter />
         </div>
-        <input type='text' />
+        <GuessInput />
+        <button>Guess</button>
+      </div>
+      <div>
+        <TimeCounter />
+        <GuessCounter />
       </div>
     </>
   );
