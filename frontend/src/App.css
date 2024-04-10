@@ -12,3 +12,34 @@ body {
 .card {
   padding: 2em;
 }
+
+.feedback {
+  display: flex;
+  justify-content: center;
+  margin: 4em 0 2em;
+
+  button {
+    font-size: 1.5em;
+    text-align: center;
+    margin: 0;
+    border-radius: 0;
+    border: 1px solid #000;
+    width: fit-content;
+    height: fit-content;
+  }
+}
+
+.guessInput {
+  input {
+    margin: 0.5em 0 2em;
+    width: 270px;
+    font-size: 1.5em;
+    letter-spacing: 10px;
+    text-align: center;
+  }
+
+  button {
+    height: auto;
+    width: 80px;
+  }
+}

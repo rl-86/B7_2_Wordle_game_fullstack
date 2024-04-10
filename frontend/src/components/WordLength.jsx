@@ -2,8 +2,9 @@ export default function WordLength() {
   return (
     <>
       <button>-</button>
-      <button> +</button>
+      <button>+</button>
       <button>0</button>
+      <button>Start</button>
     </>
   );
 }

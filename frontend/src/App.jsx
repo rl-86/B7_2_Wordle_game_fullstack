@@ -23,17 +23,17 @@ function App() {
         <p>The number of letters in the word</p>
         <div>
           <WordLength />
-          <button>Start</button>
         </div>
-        <div>
+        <div className='feedback'>
           <Letter />
           <Letter />
           <Letter />
           <Letter />
           <Letter />
         </div>
-        <GuessInput />
-        <button>Guess</button>
+        <div className='guessInput'>
+          <GuessInput />
+        </div>
       </div>
       <div>
         <TimeCounter />
