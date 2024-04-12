@@ -39,7 +39,7 @@ export default function Letter() {
         style={{ backgroundColor: getFeedbackColor() }}
         onClick={changeLetterState}
       >
-        A
+        _
       </button>
     </div>
   );

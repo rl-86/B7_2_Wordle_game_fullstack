@@ -1,16 +1,19 @@
-export default function WordLength() {
+import React from 'react';
+
+export default function WordLength({ onWordLengthChange }) {
+  const handleDecreaseLength = () => {
+    onWordLengthChange((prevLength) => Math.max(3, prevLength - 1));
+  };
+
+  const handleIncreaseLength = () => {
+    onWordLengthChange((prevLength) => Math.min(10, prevLength + 1));
+  };
+
   return (
     <>
-      <button>-</button>
-      <button>+</button>
-      <button>0</button>
-      <button>Start</button>
+      <button onClick={handleDecreaseLength}>-</button>
+      <button onClick={handleIncreaseLength}>+</button>
+      <button>Start Game</button>
     </>
   );
 }
-/* <>
-      <button onChange={() => setCount((count) => count)}>{count}</button>
-      <button onClick={() => setCount((count) => count - 1)}>-</button>
-      <button onClick={() => setCount((count) => count + 1)}>+</button>
-    </>
-    */

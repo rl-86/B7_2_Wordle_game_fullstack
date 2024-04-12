@@ -1,13 +1,24 @@
 import { useState } from 'react';
 import './App.css';
-import Letter from './components/Letter';
-import TimeCounter from './components/TimeCounter';
+
 import GuessCounter from './components/GuessCounter';
+//import GuessFeedback from './components/GuessFeedback';
 import GuessInput from './components/GuessInput';
+import Letter from './components/Letter';
+//import NewGame from './components/NewGame';
+import TimeCounter from './components/TimeCounter';
 import WordLength from './components/WordLength';
 
 function App() {
-  const [count, setCount] = useState(0);
+  const [wordLength, setWordLength] = useState(5);
+
+  const handleWordLengthChange = (length) => {
+    setWordLength(length);
+  };
+
+  const letterComponents = Array.from({ length: wordLength }, (_, index) => (
+    <Letter key={index} />
+  ));
 
   return (
     <>
@@ -22,17 +33,11 @@ function App() {
       <div>
         <p>The number of letters in the word</p>
         <div>
-          <WordLength />
+          <WordLength onWordLengthChange={handleWordLengthChange} />
         </div>
-        <div className='feedback'>
-          <Letter />
-          <Letter />
-          <Letter />
-          <Letter />
-          <Letter />
-        </div>
+        <div className='feedback'>{letterComponents}</div>
         <div className='guessInput'>
-          <GuessInput />
+          <GuessInput wordLength={wordLength} />
         </div>
       </div>
       <div>
