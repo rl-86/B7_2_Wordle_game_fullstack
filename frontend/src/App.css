@@ -2,6 +2,14 @@
   width: max-content;
   margin: 0 auto;
   max-width: 800px;
+
+  /* Color variables */
+
+  --background-color: #2d2d2d;
+  --letterDefault-color: #939393;
+  --letterIncorrect-color: #ce3434;
+  --letterMisplaced-color: #e3be28;
+  --letterCorrect-color: #409c40;
 }
 
 body {
