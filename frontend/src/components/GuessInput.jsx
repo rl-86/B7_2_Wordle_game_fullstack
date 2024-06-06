@@ -1,32 +1,18 @@
+// GuessInput component to handle the user input
 import { useState } from 'react';
 
-export default function GuessInput({ wordLength }) {
+export default function GuessInput({ wordLength, onGuess }) {
   const [inputValue, setInputValue] = useState('');
 
   const handleChange = (event) => {
     setInputValue(event.target.value);
   };
 
-  const handleGuess = async (event) => {
+  const handleGuess = (event) => {
     event.preventDefault();
-    console.log('Guess:', inputValue.toUpperCase());
-    setInputValue('');
-    try {
-      const response = await fetch('https://localhost:5001/api/guess', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ data: inputValue }),
-      });
-
-      if (!response.ok) {
-        throw new Error('Unable to fetch data from API');
-      }
-
-      console.log('Data successfully sent to API');
-    } catch (error) {
-      console.error('Error:', error.message);
+    if (inputValue.length === wordLength) {
+      onGuess(inputValue.toUpperCase());
+      setInputValue('');
     }
   };
 
@@ -40,8 +26,11 @@ export default function GuessInput({ wordLength }) {
           onChange={handleChange}
           placeholder={`${wordLength} Letters`}
         />
-        <button type='submit'>Guess</button>
+        <button type='submit' disabled={inputValue.length !== wordLength}>
+          Guess
+        </button>
       </form>
     </div>
   );
 }
+// end of GuessInput.jsx

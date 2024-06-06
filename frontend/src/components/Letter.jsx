@@ -1,46 +1,32 @@
-import { useState } from 'react';
+// Letter component to display the letters of the guessed word
+import React from 'react';
 
-export default function Letter() {
-  const [letterState, setLetterState] = useState('state1');
-
-  const changeLetterState = () => {
-    switch (letterState) {
-      case 'state1':
-        setLetterState('state2');
-        break;
-      case 'state2':
-        setLetterState('state3');
-        break;
-      case 'state3':
-        setLetterState('state4');
-        break;
-      case 'state4':
-        setLetterState('state1');
-        break;
-    }
-  };
-
+export default function Letter({ letter, feedback }) {
+  console.log(letter);
   const getFeedbackColor = () => {
-    switch (letterState) {
-      case 'state1':
-        return 'var(--letterDefault-color)';
-      case 'state2':
-        return 'var(--letterIncorrect-color)';
-      case 'state3':
-        return 'var(--letterMisplaced-color)';
-      case 'state4':
-        return 'var(--letterCorrect-color)';
-    }
+    const feedbackColor = {
+      default: 'var(--letterDefault-color)',
+      incorrect: 'var(--letterIncorrect-color)',
+      misplaced: 'var(--letterMisplaced-color)',
+      correct: 'var(--letterCorrect-color)',
+    };
+
+    return feedbackColor[feedback];
   };
 
-  return (
-    <div>
-      <button
-        style={{ backgroundColor: getFeedbackColor() }}
-        onClick={changeLetterState}
-      >
-        _
-      </button>
-    </div>
-  );
+  const letterStyle = {
+    backgroundColor: getFeedbackColor(),
+    border: '2px lightgrey solid',
+    borderRadius: '3px',
+    width: '60px',
+    height: '60px',
+    display: 'inline-block',
+    margin: '5px',
+    lineHeight: '60px',
+    textAlign: 'center',
+    fontSize: '24px',
+    fontWeight: 'bold',
+  };
+
+  return <div style={letterStyle}>{letter ? letter : ''}</div>;
 }
