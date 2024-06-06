@@ -14,9 +14,11 @@ function App() {
   const [lettersFeedback, setLettersFeedback] = useState(
     Array(wordLength).fill(null)
   );
+  const [pastGuesses, setPastGuesses] = useState([]);
 
   useEffect(() => {
     setLettersFeedback(Array(wordLength).fill(null));
+    setPastGuesses([]);
   }, [wordLength]);
 
   const handleWordLengthChange = (newLength) => {
@@ -24,16 +26,41 @@ function App() {
   };
 
   const handleGuess = (guessedWord) => {
-    setGuessedWord(guessedWord);
     const feedbackResult = feedback(secretWord, guessedWord).map(
       (result) => result.result
     );
+    setGuessedWord(guessedWord);
     setLettersFeedback(feedbackResult);
+    setPastGuesses((pastGuesses) => [
+      ...pastGuesses,
+      { word: guessedWord, feedback: feedbackResult },
+    ]);
   };
 
-  const letterComponents = lettersFeedback.map((feedback, index) => (
-    <Letter key={index} letter={guessedWord[index]} feedback={feedback} />
-  ));
+  const letterComponents =
+    pastGuesses.length > 0
+      ? pastGuesses[pastGuesses.length - 1].word
+          .split('')
+          .concat(Array(wordLength - guessedWord.length).fill(''))
+          .map((letter, index) => (
+            <Letter
+              key={index}
+              letter={letter}
+              feedback={lettersFeedback[index]}
+            />
+          ))
+      : null;
+
+  const pastGuessesComponents =
+    pastGuesses.length > 1
+      ? pastGuesses.slice(0, -1).map((guess, index) => (
+          <div key={index}>
+            {guess.word.split('').map((letter, i) => (
+              <Letter key={i} letter={letter} feedback={guess.feedback[i]} />
+            ))}
+          </div>
+        ))
+      : null;
 
   return (
     <>
@@ -41,9 +68,10 @@ function App() {
 
       <div>
         <p>The number of letters in the word</p>
-        <div>
+        <div className='wordlength'>
           <WordLength onWordLengthChange={handleWordLengthChange} />
         </div>
+        <div className='pastGuesses'>{pastGuessesComponents}</div>
         <div className='feedback'>{letterComponents}</div>
         <div className='guessInput'>
           <GuessInput

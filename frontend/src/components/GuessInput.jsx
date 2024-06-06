@@ -33,4 +33,3 @@ export default function GuessInput({ wordLength, onGuess }) {
     </div>
   );
 }
-// end of GuessInput.jsx
