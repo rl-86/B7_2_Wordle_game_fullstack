@@ -6,6 +6,7 @@ import GuessInput from './components/GuessInput';
 import Letter from './components/Letter';
 import WordLength from './components/WordLength';
 import feedback from './feedbackAlgo';
+import Modal from './components/Modal';
 
 function App() {
   const [wordLength, setWordLength] = useState(5);
@@ -15,6 +16,18 @@ function App() {
     Array(wordLength).fill(null)
   );
   const [pastGuesses, setPastGuesses] = useState([]);
+  const [showModal, setShowModal] = useState(false);
+
+  const handleModalSubmit = (name) => {
+    console.log(name);
+    setShowModal(false);
+  };
+
+  useEffect(() => {
+    if (lettersFeedback.every((feedback) => feedback === 'correct')) {
+      setShowModal(true);
+    }
+  }, [lettersFeedback]);
 
   useEffect(() => {
     setLettersFeedback(Array(wordLength).fill(null));
@@ -80,6 +93,11 @@ function App() {
             onGuess={handleGuess}
           />
         </div>
+        <Modal
+          isOpen={showModal}
+          onClose={() => setShowModal(false)}
+          onSubmit={handleModalSubmit}
+        />
       </div>
     </>
   );
