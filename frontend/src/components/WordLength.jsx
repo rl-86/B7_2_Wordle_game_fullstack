@@ -1,7 +1,6 @@
-// WordLength component to handle the word length selection
 import React from 'react';
 
-export default function WordLength({ onWordLengthChange }) {
+export default function WordLength({ onWordLengthChange, onStartGame }) {
   const handleDecreaseLength = () => {
     onWordLengthChange((prevLength) => Math.max(4, prevLength - 1));
   };
@@ -10,11 +9,15 @@ export default function WordLength({ onWordLengthChange }) {
     onWordLengthChange((prevLength) => Math.min(6, prevLength + 1));
   };
 
+  const handleStartGame = () => {
+    onStartGame();
+  };
+
   return (
     <>
       <button onClick={handleDecreaseLength}>-</button>
       <button onClick={handleIncreaseLength}>+</button>
-      <button>Start Game</button>
+      <button onClick={handleStartGame}>Start Game</button>
     </>
   );
 }

@@ -1,12 +1,12 @@
-// Main component
-import { useState, useEffect } from 'react';
 import './App.css';
+import { useState, useEffect, useRef } from 'react';
 
 import GuessInput from './components/GuessInput';
 import Letter from './components/Letter';
 import WordLength from './components/WordLength';
-import feedback from './feedbackAlgo';
+
 import Modal from './components/Modal';
+import Timer from './components/Timer';
 
 function App() {
   const [wordLength, setWordLength] = useState(5);
@@ -17,10 +17,27 @@ function App() {
   );
   const [pastGuesses, setPastGuesses] = useState([]);
   const [showModal, setShowModal] = useState(false);
+  const [startTime, setStartTime] = useState(null);
+  const [guessCount, setGuessCount] = useState(0);
 
   const handleModalSubmit = (name) => {
     console.log(name);
+    const time = Date.now() - startTime;
+    onSubmit({ name, time, guessCount, wordLength });
+
     setShowModal(false);
+  };
+
+  const handleStartGame = async () => {
+    const response = await fetch(`/api/word/${wordLength}`);
+    const data = await response.json();
+    setSecretWord(data.word);
+    setGuessedWord('');
+    setLettersFeedback(Array(wordLength).fill(null));
+    setPastGuesses([]);
+    setShowModal(false);
+    setStartTime(Date.now());
+    setGuessCount(0);
   };
 
   useEffect(() => {
@@ -38,16 +55,17 @@ function App() {
     setWordLength(newLength);
   };
 
-  const handleGuess = (guessedWord) => {
-    const feedbackResult = feedback(secretWord, guessedWord).map(
-      (result) => result.result
-    );
+  const handleGuess = async (guessedWord, feedbackResult) => {
     setGuessedWord(guessedWord);
-    setLettersFeedback(feedbackResult);
+    setLettersFeedback(feedbackResult.map((result) => result.result));
     setPastGuesses((pastGuesses) => [
       ...pastGuesses,
-      { word: guessedWord, feedback: feedbackResult },
+      {
+        word: guessedWord,
+        feedback: feedbackResult.map((result) => result.result),
+      },
     ]);
+    setGuessCount(guessCount + 1);
   };
 
   const letterComponents =
@@ -82,7 +100,10 @@ function App() {
       <div>
         <p>The number of letters in the word</p>
         <div className='wordlength'>
-          <WordLength onWordLengthChange={handleWordLengthChange} />
+          <WordLength
+            onWordLengthChange={handleWordLengthChange}
+            onStartGame={handleStartGame}
+          />
         </div>
         <div className='pastGuesses'>{pastGuessesComponents}</div>
         <div className='feedback'>{letterComponents}</div>
@@ -93,6 +114,7 @@ function App() {
             onGuess={handleGuess}
           />
         </div>
+        <Timer startTime={startTime} /> {}
         <Modal
           isOpen={showModal}
           onClose={() => setShowModal(false)}

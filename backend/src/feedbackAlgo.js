@@ -4,6 +4,9 @@
 export default function feedback(secretWord, guessedWord) {
   // Converts a string to an array and puts each letter into an object.
   function convertWord(inputWord) {
+    if (typeof inputWord !== 'string') {
+      throw new Error('inputWord must be a string');
+    }
     const letterObjects = [];
     inputWord = inputWord.toUpperCase();
     for (let i = 0; i < inputWord.length; i++) {

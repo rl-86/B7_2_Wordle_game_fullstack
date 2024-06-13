@@ -1,4 +1,3 @@
-// GuessInput component to handle the user input
 import { useState } from 'react';
 
 export default function GuessInput({ wordLength, onGuess }) {
@@ -8,17 +7,29 @@ export default function GuessInput({ wordLength, onGuess }) {
     setInputValue(event.target.value);
   };
 
-  const handleGuess = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    if (inputValue.length === wordLength) {
-      onGuess(inputValue.toUpperCase());
-      setInputValue('');
+    const response = await fetch('/api/feedback', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ guessedWord: inputValue }),
+    });
+
+    if (!response.ok) {
+      console.error('Failed to get feedback', response);
+      return;
     }
+
+    const data = await response.json();
+    onGuess(inputValue, data);
+    setInputValue('');
   };
 
   return (
     <div>
-      <form onSubmit={handleGuess}>
+      <form onSubmit={handleSubmit}>
         <input
           type='text'
           maxLength={wordLength}

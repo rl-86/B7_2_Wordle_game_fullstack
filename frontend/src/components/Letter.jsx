@@ -1,4 +1,3 @@
-// Letter component to display the letters of the guessed word
 import React from 'react';
 
 export default function Letter({ letter, feedback }) {

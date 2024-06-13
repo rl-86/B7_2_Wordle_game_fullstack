@@ -1,4 +1,3 @@
-// Modal component to display the highscore submit modal
 import React, { useState, useRef, useEffect } from 'react';
 
 function Modal({ isOpen, onClose, onSubmit }) {
