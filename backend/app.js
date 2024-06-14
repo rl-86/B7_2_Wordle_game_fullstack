@@ -1,10 +1,13 @@
 import express from 'express';
 import session from 'express-session';
 import fs from 'fs/promises';
-import { Item } from './src/models.js';
 import feedback from './src/feedbackAlgo.js';
+import { Highscore } from './src/models.js';
+import connectDB from './src/connectDB.js';
 
 const app = express();
+connectDB();
+
 app.use(express.json());
 app.use(
   session({
@@ -24,6 +27,18 @@ app.get('/info', async (req, res) => {
 
 app.get('/highscore', async (req, res) => {
   res.render('Highscore page'), res.render('highscore.jsx');
+});
+
+app.post('/highscore', async (req, res) => {
+  try {
+    const { name, letters, guesses, time, word } = req.body;
+    const newHighscore = new Highscore({ name, letters, guesses, time, word });
+    await newHighscore.save();
+    res.status(201).send('Highscore saved');
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Server error');
+  }
 });
 
 let words4, words5, words6;
