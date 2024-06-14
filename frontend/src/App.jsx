@@ -123,6 +123,9 @@ function App() {
           isOpen={showModal}
           onClose={() => setShowModal(false)}
           onSubmit={handleModalSubmit}
+          guessedWord={guessedWord}
+          guessCount={guessCount}
+          time={endTime ? (endTime - startTime) / 1000 : 0}
         />
       </div>
     </>

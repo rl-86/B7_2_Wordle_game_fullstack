@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 
-function Modal({ isOpen, onClose, onSubmit }) {
+function Modal({ isOpen, onClose, onSubmit, guessedWord, guessCount, time }) {
   const [name, setName] = useState('');
   const inputRef = useRef();
 
@@ -29,9 +29,9 @@ function Modal({ isOpen, onClose, onSubmit }) {
 
   return (
     <div className='modal'>
-      <h2>You guessed the correct word!</h2>
-      <p>Your time:</p>
-      <p>Number of guesses:</p>
+      <h2>You guessed the correct word: {guessedWord.toUpperCase()}</h2>
+      <p>Your time: {time.toFixed(1)} seconds</p>
+      <p>Number of guesses: {guessCount}</p>
       <p>Submit your name to the highscore list</p>
       <form onSubmit={handleSubmit}>
         <input
