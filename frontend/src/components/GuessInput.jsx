@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-export default function GuessInput({ wordLength, onGuess }) {
+export default function GuessInput({ wordLength, onGuess, isGameActive }) {
   const [inputValue, setInputValue] = useState('');
 
   const handleChange = (event) => {
@@ -23,7 +23,8 @@ export default function GuessInput({ wordLength, onGuess }) {
     }
 
     const data = await response.json();
-    onGuess(inputValue, data);
+    onGuess(inputValue, data.feedback);
+    console.log('data:', data);
     setInputValue('');
   };
 
@@ -36,6 +37,7 @@ export default function GuessInput({ wordLength, onGuess }) {
           value={inputValue}
           onChange={handleChange}
           placeholder={`${wordLength} Letters`}
+          disabled={!isGameActive}
         />
         <button type='submit' disabled={inputValue.length !== wordLength}>
           Guess

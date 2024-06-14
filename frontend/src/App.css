@@ -17,6 +17,12 @@ body {
   text-align: center;
 }
 
+.headline {
+  color: #ffffff;
+  font-size: 3em;
+  margin: 1em;
+}
+
 .card {
   padding: 2em;
 }

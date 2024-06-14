@@ -26,7 +26,6 @@ app.get('/highscore', async (req, res) => {
   res.render('Highscore page'), res.render('highscore.jsx');
 });
 
-// Läs in ordlistorna
 let words4, words5, words6;
 fs.readFile('src/word/words4.json', 'utf8').then(
   (data) => (words4 = JSON.parse(data))
@@ -38,12 +37,10 @@ fs.readFile('src/word/words6.json', 'utf8').then(
   (data) => (words6 = JSON.parse(data))
 );
 
-// Funktion för att slumpa fram ett ord från en lista
 function getRandomWord(list) {
   return list[Math.floor(Math.random() * list.length)];
 }
 
-// API-rutt för att få ett slumpmässigt ord
 app.get('/api/word/:length', (req, res) => {
   const length = parseInt(req.params.length);
   let word;
@@ -61,9 +58,9 @@ app.get('/api/word/:length', (req, res) => {
       res.status(400).send('Invalid word length');
       return;
   }
-  // Spara det hemliga ordet i sessionen
+
   req.session.secretWord = word;
-  res.json({ word });
+  res.json({ success: true });
 });
 
 app.post('/api/feedback', (req, res) => {
@@ -73,7 +70,7 @@ app.post('/api/feedback', (req, res) => {
     res.status(400).json({ error: 'Invalid input' });
     return;
   }
-  // Hämta det hemliga ordet från sessionen
+
   const secretWord = req.session.secretWord;
 
   const feedbackResult = feedback(secretWord, guessedWord);

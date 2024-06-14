@@ -1,16 +1,14 @@
 import './App.css';
 import { useState, useEffect, useRef } from 'react';
-
 import GuessInput from './components/GuessInput';
 import Letter from './components/Letter';
-import WordLength from './components/WordLength';
-
 import Modal from './components/Modal';
 import Timer from './components/Timer';
+import WordLength from './components/WordLength';
 
 function App() {
+  const [isGameActive, setIsGameActive] = useState(false);
   const [wordLength, setWordLength] = useState(5);
-  const [secretWord, setSecretWord] = useState('HELLO');
   const [guessedWord, setGuessedWord] = useState('');
   const [lettersFeedback, setLettersFeedback] = useState(
     Array(wordLength).fill(null)
@@ -18,6 +16,7 @@ function App() {
   const [pastGuesses, setPastGuesses] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [startTime, setStartTime] = useState(null);
+  const [endTime, setEndTime] = useState(null);
   const [guessCount, setGuessCount] = useState(0);
 
   const handleModalSubmit = (name) => {
@@ -31,7 +30,7 @@ function App() {
   const handleStartGame = async () => {
     const response = await fetch(`/api/word/${wordLength}`);
     const data = await response.json();
-    setSecretWord(data.word);
+    setIsGameActive(true);
     setGuessedWord('');
     setLettersFeedback(Array(wordLength).fill(null));
     setPastGuesses([]);
@@ -42,6 +41,7 @@ function App() {
 
   useEffect(() => {
     if (lettersFeedback.every((feedback) => feedback === 'correct')) {
+      setEndTime(Date.now());
       setShowModal(true);
     }
   }, [lettersFeedback]);
@@ -56,6 +56,10 @@ function App() {
   };
 
   const handleGuess = async (guessedWord, feedbackResult) => {
+    if (!Array.isArray(feedbackResult)) {
+      console.error('feedbackResult must be an array');
+      return;
+    }
     setGuessedWord(guessedWord);
     setLettersFeedback(feedbackResult.map((result) => result.result));
     setPastGuesses((pastGuesses) => [
@@ -95,8 +99,7 @@ function App() {
 
   return (
     <>
-      <h1>Wordle Game!</h1>
-
+      <h1 className='headline'>Guess the word game! (Wordle)</h1>
       <div>
         <p>The number of letters in the word</p>
         <div className='wordlength'>
@@ -112,9 +115,10 @@ function App() {
             key={wordLength}
             wordLength={wordLength}
             onGuess={handleGuess}
+            isGameActive={isGameActive}
           />
         </div>
-        <Timer startTime={startTime} /> {}
+        <Timer startTime={startTime} endTime={endTime} />
         <Modal
           isOpen={showModal}
           onClose={() => setShowModal(false)}

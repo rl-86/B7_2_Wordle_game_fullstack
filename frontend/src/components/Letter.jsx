@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function Letter({ letter, feedback }) {
+export default function Letter({ letter, feedback = 'default' }) {
   console.log(letter);
   const getFeedbackColor = () => {
     const feedbackColor = {
@@ -27,5 +27,5 @@ export default function Letter({ letter, feedback }) {
     fontWeight: 'bold',
   };
 
-  return <div style={letterStyle}>{letter ? letter : ''}</div>;
+  return <div style={letterStyle}>{letter ? letter.toUpperCase() : ''}</div>;
 }
