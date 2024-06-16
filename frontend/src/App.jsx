@@ -22,8 +22,7 @@ function App() {
   const handleModalSubmit = (name) => {
     console.log(name);
     const time = Date.now() - startTime;
-    onSubmit({ name, time, guessCount, wordLength });
-
+    handleSubmitToDatabase(name, time, guessCount, wordLength);
     setShowModal(false);
   };
 
@@ -70,6 +69,43 @@ function App() {
       },
     ]);
     setGuessCount(guessCount + 1);
+  };
+
+  const handleSubmitToDatabase = async (name, time, guessCount, wordLength) => {
+    try {
+      const response = await fetch('http://localhost:5080/highscore', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name,
+          letters: wordLength,
+          guesses: guessCount,
+          time,
+          word: guessedWord,
+        }),
+      });
+
+      if (response.ok) {
+        console.log('Highscore saved');
+      } else {
+        throw new Error('Failed to save highscore');
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const onSubmit = ({ data }) => {
+    console.log('Submitting data:', data);
+    if (data) {
+      const time = Date.now() - startTime;
+      handleSubmitToDatabase(data, time, guessCount, wordLength);
+      setShowModal(false);
+    } else {
+      console.error('Name is missing in data');
+    }
   };
 
   const letterComponents =
@@ -131,5 +167,4 @@ function App() {
     </>
   );
 }
-
 export default App;

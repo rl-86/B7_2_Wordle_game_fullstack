@@ -8,6 +8,6 @@ const highscoreSchema = new mongoose.Schema({
   word: String,
 });
 
-const Highscore = mongoose.model('Highscore', highscoreSchema);
+const Highscore = mongoose.model('Highscore', highscoreSchema, 'Highscore');
 
 export { Highscore };

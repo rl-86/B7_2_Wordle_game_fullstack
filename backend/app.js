@@ -4,9 +4,12 @@ import fs from 'fs/promises';
 import feedback from './src/feedbackAlgo.js';
 import { Highscore } from './src/models.js';
 import connectDB from './src/connectDB.js';
+import cors from 'cors';
 
 const app = express();
 connectDB();
+
+app.use(cors());
 
 app.use(express.json());
 app.use(
