@@ -20,11 +20,12 @@ function App() {
   const [guessCount, setGuessCount] = useState(0);
 
   const handleModalSubmit = (name) => {
-    console.log(name);
+    console.log('Name submitted:' + name);
     const timeInMilliseconds = endTime - startTime;
     const timeInSeconds = timeInMilliseconds / 1000;
     handleSubmitToDatabase(name, timeInSeconds, guessCount, wordLength);
     setShowModal(false);
+    resetGame();
   };
 
   const handleStartGame = async () => {
@@ -100,17 +101,6 @@ function App() {
       }
     } catch (error) {
       console.error(error);
-    }
-  };
-
-  const onSubmit = ({ data }) => {
-    console.log('Submitting data:', data);
-    if (data) {
-      const time = Date.now() - startTime;
-      handleSubmitToDatabase(data, time, guessCount, wordLength);
-      setShowModal(false);
-    } else {
-      console.error('Name is missing in data');
     }
   };
 
