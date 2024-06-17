@@ -1,7 +1,14 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 export default function GuessInput({ wordLength, onGuess, isGameActive }) {
   const [inputValue, setInputValue] = useState('');
+  const inputRef = useRef(null);
+
+  useEffect(() => {
+    if (isGameActive) {
+      inputRef.current.focus();
+    }
+  }, [isGameActive]);
 
   const handleChange = (event) => {
     setInputValue(event.target.value);
@@ -32,6 +39,7 @@ export default function GuessInput({ wordLength, onGuess, isGameActive }) {
     <div>
       <form onSubmit={handleSubmit}>
         <input
+          ref={inputRef}
           type='text'
           maxLength={wordLength}
           value={inputValue}
