@@ -21,8 +21,9 @@ function App() {
 
   const handleModalSubmit = (name) => {
     console.log(name);
-    const time = Date.now() - startTime;
-    handleSubmitToDatabase(name, time, guessCount, wordLength);
+    const timeInMilliseconds = endTime - startTime;
+    const timeInSeconds = timeInMilliseconds / 1000;
+    handleSubmitToDatabase(name, timeInSeconds, guessCount, wordLength);
     setShowModal(false);
   };
 
@@ -71,7 +72,12 @@ function App() {
     setGuessCount(guessCount + 1);
   };
 
-  const handleSubmitToDatabase = async (name, time, guessCount, wordLength) => {
+  const handleSubmitToDatabase = async (
+    name,
+    timeInSeconds,
+    guessCount,
+    wordLength
+  ) => {
     try {
       const response = await fetch('http://localhost:5080/highscore', {
         method: 'POST',
@@ -82,7 +88,7 @@ function App() {
           name,
           letters: wordLength,
           guesses: guessCount,
-          time,
+          time: timeInSeconds,
           word: guessedWord,
         }),
       });
@@ -106,6 +112,17 @@ function App() {
     } else {
       console.error('Name is missing in data');
     }
+  };
+
+  const resetGame = () => {
+    setIsGameActive(false);
+    setGuessedWord('');
+    setLettersFeedback(Array(wordLength).fill(null));
+    setPastGuesses([]);
+    setShowModal(false);
+    setStartTime(null);
+    setEndTime(null);
+    setGuessCount(0);
   };
 
   const letterComponents =
