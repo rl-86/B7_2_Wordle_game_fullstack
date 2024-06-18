@@ -1,3 +1,4 @@
+import React from 'react';
 import './App.css';
 import { useState, useEffect, useRef } from 'react';
 import GuessInput from './components/GuessInput';
@@ -5,6 +6,7 @@ import Letter from './components/Letter';
 import Modal from './components/Modal';
 import Timer from './components/Timer';
 import WordLength from './components/WordLength';
+import { Link } from 'react-router-dom';
 
 function App() {
   const [isGameActive, setIsGameActive] = useState(false);
@@ -144,6 +146,7 @@ function App() {
 
   return (
     <>
+      <Link to='/info'>Info page</Link>|<Link to='/highscores'>Highscores</Link>
       <h1 className='headline'>Guess the word game! (Wordle)</h1>
       <div>
         <p>The number of letters in the word</p>

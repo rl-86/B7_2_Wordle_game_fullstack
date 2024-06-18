@@ -1,0 +1,9 @@
+.highscores-table {
+  border-collapse: separate;
+  border-spacing: 0.5rem;
+}
+
+.highscores-table th,
+.highscores-table td {
+  padding: 0.5rem;
+}
