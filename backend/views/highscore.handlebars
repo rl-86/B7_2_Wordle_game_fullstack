@@ -1,0 +1,28 @@
+<h1>Highscores</h1>
+<style>
+  table { width: 60%; border-collapse: collapse; } th, td { border: 1px solid
+  #ddd; text-align: left; padding: 8px; } th { background-color: #646464; }
+  tr:nth-child(even) { background-color: #c5c5c5; }
+</style>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Letters</th>
+      <th>Guesses</th>
+      <th>Time</th>
+      <th>Word</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each highscores}}
+      <tr>
+        <td>{{this.name}}</td>
+        <td>{{this.letters}}</td>
+        <td>{{this.guesses}}</td>
+        <td>{{this.time}}</td>
+        <td>{{this.word}}</td>
+      </tr>
+    {{/each}}
+  </tbody>
+</table>

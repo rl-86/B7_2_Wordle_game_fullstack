@@ -1,4 +1,5 @@
 import express from 'express';
+import { engine } from 'express-handlebars';
 import session from 'express-session';
 import fs from 'fs/promises';
 import feedback from './src/feedbackAlgo.js';
@@ -10,6 +11,9 @@ const app = express();
 connectDB();
 
 app.use(cors());
+app.engine('handlebars', engine());
+app.set('view engine', 'handlebars');
+app.set('views', './views');
 
 app.use(express.json());
 app.use(
@@ -28,8 +32,19 @@ app.get('/info', async (req, res) => {
   res.render('info.jsx');
 });
 
+async function getHighscoresFromDatabase() {
+  return Highscore.find().sort({ guesses: 1 });
+}
+
 app.get('/highscore', async (req, res) => {
-  res.render('highscore.jsx');
+  try {
+    const highscores = await getHighscoresFromDatabase();
+    const cleanHighscores = JSON.parse(JSON.stringify(highscores));
+    res.render('highscore', { highscores: cleanHighscores });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Server error');
+  }
 });
 
 app.post('/highscore', async (req, res) => {
@@ -38,6 +53,16 @@ app.post('/highscore', async (req, res) => {
     const newHighscore = new Highscore({ name, letters, guesses, time, word });
     await newHighscore.save();
     res.status(201).send('Highscore saved');
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Server error');
+  }
+});
+
+app.get('/api/highscores', async (req, res) => {
+  try {
+    const highscores = await getHighscoresFromDatabase();
+    res.json(highscores);
   } catch (err) {
     console.error(err);
     res.status(500).send('Server error');
