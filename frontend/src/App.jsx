@@ -149,6 +149,8 @@ function App() {
           <WordLength
             onWordLengthChange={handleWordLengthChange}
             onStartGame={handleStartGame}
+            isGameActive={isGameActive}
+            onResetGame={resetGame}
           />
         </div>
         <div className='pastGuesses'>{pastGuessesComponents}</div>
