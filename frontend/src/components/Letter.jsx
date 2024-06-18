@@ -1,7 +1,6 @@
 import React from 'react';
 
 export default function Letter({ letter, feedback = 'default' }) {
-  console.log(letter);
   const getFeedbackColor = () => {
     const feedbackColor = {
       default: 'var(--letterDefault-color)',

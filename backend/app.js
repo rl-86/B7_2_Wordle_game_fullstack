@@ -21,15 +21,15 @@ app.use(
 );
 
 app.get('/', async (req, res) => {
-  res.json('Wordle Backend is upp and running!');
+  res.json('Wordle server is upp and running!');
 });
 
 app.get('/info', async (req, res) => {
-  res.render('Infomation page'), res.render('info.jsx');
+  res.render('info.jsx');
 });
 
 app.get('/highscore', async (req, res) => {
-  res.render('Highscore page'), res.render('highscore.jsx');
+  res.render('highscore.jsx');
 });
 
 app.post('/highscore', async (req, res) => {
@@ -44,39 +44,44 @@ app.post('/highscore', async (req, res) => {
   }
 });
 
-let words4, words5, words6;
-fs.readFile('src/word/words4.json', 'utf8').then(
-  (data) => (words4 = JSON.parse(data))
-);
-fs.readFile('src/word/words5.json', 'utf8').then(
-  (data) => (words5 = JSON.parse(data))
-);
-fs.readFile('src/word/words6.json', 'utf8').then(
-  (data) => (words6 = JSON.parse(data))
-);
+let words = [];
 
-function getRandomWord(list) {
-  return list[Math.floor(Math.random() * list.length)];
+async function loadWords() {
+  try {
+    const data = await fs.readFile('src/word/words.json', 'utf8');
+    words = JSON.parse(data);
+  } catch (err) {
+    console.error('Error loading or parsing words.json', err);
+    process.exit(1);
+  }
+}
+
+loadWords();
+
+function getFilteredWords(words, length, allowDuplicates = true) {
+  return words.filter((word) => {
+    const meetsLengthCriteria = word.length === length;
+    const hasDuplicates = new Set(word).size !== word.length;
+    return meetsLengthCriteria && (allowDuplicates || !hasDuplicates);
+  });
+}
+
+function getRandomWord(words) {
+  const index = Math.floor(Math.random() * words.length);
+  return words[index];
 }
 
 app.get('/api/word/:length', (req, res) => {
   const length = parseInt(req.params.length);
-  let word;
-  switch (length) {
-    case 4:
-      word = getRandomWord(words4);
-      break;
-    case 5:
-      word = getRandomWord(words5);
-      break;
-    case 6:
-      word = getRandomWord(words6);
-      break;
-    default:
-      res.status(400).send('Invalid word length');
-      return;
+  const allowDuplicates = req.query.allowDuplicates !== 'false';
+
+  const filteredWords = getFilteredWords(words, length, allowDuplicates);
+  if (filteredWords.length === 0) {
+    res.status(400).send('No words found matching criteria');
+    return;
   }
 
+  const word = getRandomWord(filteredWords);
   req.session.secretWord = word;
   res.json({ success: true });
 });

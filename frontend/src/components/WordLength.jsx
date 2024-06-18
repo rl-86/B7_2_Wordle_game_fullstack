@@ -1,6 +1,13 @@
 import React from 'react';
 
-export default function WordLength({ onWordLengthChange, onStartGame }) {
+export default function WordLength({
+  onWordLengthChange,
+  onStartGame,
+  isGameActive,
+  onResetGame,
+  allowDuplicates,
+  onAllowDuplicatesChange,
+}) {
   const handleDecreaseLength = () => {
     onWordLengthChange((prevLength) => Math.max(4, prevLength - 1));
   };
@@ -9,15 +16,37 @@ export default function WordLength({ onWordLengthChange, onStartGame }) {
     onWordLengthChange((prevLength) => Math.min(6, prevLength + 1));
   };
 
-  const handleStartGame = () => {
+  const handleStart = () => {
     onStartGame();
+  };
+
+  const handleReset = () => {
+    onResetGame();
   };
 
   return (
     <>
-      <button onClick={handleDecreaseLength}>-</button>
-      <button onClick={handleIncreaseLength}>+</button>
-      <button onClick={handleStartGame}>Start Game</button>
+      <div>
+        <button onClick={handleDecreaseLength} disabled={isGameActive}>
+          -
+        </button>
+        <button onClick={handleIncreaseLength} disabled={isGameActive}>
+          +
+        </button>
+        <button onClick={handleStart}>Start Game</button>
+        <button onClick={handleReset} disabled={!isGameActive}>
+          Reset
+        </button>
+      </div>
+      <div>
+        <input
+          type='checkbox'
+          checked={allowDuplicates}
+          onChange={(e) => onAllowDuplicatesChange(e.target.checked)}
+          disabled={isGameActive}
+        />
+        Allow duplicate letters
+      </div>
     </>
   );
 }

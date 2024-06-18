@@ -18,17 +18,21 @@ function App() {
   const [startTime, setStartTime] = useState(null);
   const [endTime, setEndTime] = useState(null);
   const [guessCount, setGuessCount] = useState(0);
+  const [allowDuplicates, setAllowDuplicates] = useState(true);
 
   const handleModalSubmit = (name) => {
-    console.log(name);
-    const time = Date.now() - startTime;
-    handleSubmitToDatabase(name, time, guessCount, wordLength);
+    console.log('Name submitted: ' + name);
+    const timeInMilliseconds = endTime - startTime;
+    const timeInSeconds = timeInMilliseconds / 1000;
+    handleSubmitToDatabase(name, timeInSeconds, guessCount, wordLength);
     setShowModal(false);
+    resetGame();
   };
 
   const handleStartGame = async () => {
-    const response = await fetch(`/api/word/${wordLength}`);
-    const data = await response.json();
+    const response = await fetch(
+      `/api/word/${wordLength}?allowDuplicates=${allowDuplicates}`
+    );
     setIsGameActive(true);
     setGuessedWord('');
     setLettersFeedback(Array(wordLength).fill(null));
@@ -71,7 +75,12 @@ function App() {
     setGuessCount(guessCount + 1);
   };
 
-  const handleSubmitToDatabase = async (name, time, guessCount, wordLength) => {
+  const handleSubmitToDatabase = async (
+    name,
+    timeInSeconds,
+    guessCount,
+    wordLength
+  ) => {
     try {
       const response = await fetch('http://localhost:5080/highscore', {
         method: 'POST',
@@ -82,7 +91,7 @@ function App() {
           name,
           letters: wordLength,
           guesses: guessCount,
-          time,
+          time: timeInSeconds,
           word: guessedWord,
         }),
       });
@@ -97,15 +106,15 @@ function App() {
     }
   };
 
-  const onSubmit = ({ data }) => {
-    console.log('Submitting data:', data);
-    if (data) {
-      const time = Date.now() - startTime;
-      handleSubmitToDatabase(data, time, guessCount, wordLength);
-      setShowModal(false);
-    } else {
-      console.error('Name is missing in data');
-    }
+  const resetGame = () => {
+    setIsGameActive(false);
+    setGuessedWord('');
+    setLettersFeedback(Array(wordLength).fill(null));
+    setPastGuesses([]);
+    setShowModal(false);
+    setStartTime(null);
+    setEndTime(null);
+    setGuessCount(0);
   };
 
   const letterComponents =
@@ -142,6 +151,10 @@ function App() {
           <WordLength
             onWordLengthChange={handleWordLengthChange}
             onStartGame={handleStartGame}
+            isGameActive={isGameActive}
+            onResetGame={resetGame}
+            allowDuplicates={allowDuplicates}
+            onAllowDuplicatesChange={setAllowDuplicates}
           />
         </div>
         <div className='pastGuesses'>{pastGuessesComponents}</div>
