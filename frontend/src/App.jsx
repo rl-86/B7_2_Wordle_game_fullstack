@@ -18,9 +18,10 @@ function App() {
   const [startTime, setStartTime] = useState(null);
   const [endTime, setEndTime] = useState(null);
   const [guessCount, setGuessCount] = useState(0);
+  const [allowDuplicates, setAllowDuplicates] = useState(true);
 
   const handleModalSubmit = (name) => {
-    console.log('Name submitted:' + name);
+    console.log('Name submitted: ' + name);
     const timeInMilliseconds = endTime - startTime;
     const timeInSeconds = timeInMilliseconds / 1000;
     handleSubmitToDatabase(name, timeInSeconds, guessCount, wordLength);
@@ -29,8 +30,9 @@ function App() {
   };
 
   const handleStartGame = async () => {
-    const response = await fetch(`/api/word/${wordLength}`);
-    const data = await response.json();
+    const response = await fetch(
+      `/api/word/${wordLength}?allowDuplicates=${allowDuplicates}`
+    );
     setIsGameActive(true);
     setGuessedWord('');
     setLettersFeedback(Array(wordLength).fill(null));
@@ -151,6 +153,8 @@ function App() {
             onStartGame={handleStartGame}
             isGameActive={isGameActive}
             onResetGame={resetGame}
+            allowDuplicates={allowDuplicates}
+            onAllowDuplicatesChange={setAllowDuplicates}
           />
         </div>
         <div className='pastGuesses'>{pastGuessesComponents}</div>

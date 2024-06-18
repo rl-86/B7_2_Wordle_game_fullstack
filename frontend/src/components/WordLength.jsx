@@ -5,6 +5,8 @@ export default function WordLength({
   onStartGame,
   isGameActive,
   onResetGame,
+  allowDuplicates,
+  onAllowDuplicatesChange,
 }) {
   const handleDecreaseLength = () => {
     onWordLengthChange((prevLength) => Math.max(4, prevLength - 1));
@@ -36,7 +38,15 @@ export default function WordLength({
           Reset
         </button>
       </div>
-      <div></div>
+      <div>
+        <input
+          type='checkbox'
+          checked={allowDuplicates}
+          onChange={(e) => onAllowDuplicatesChange(e.target.checked)}
+          disabled={isGameActive}
+        />
+        Allow duplicate letters
+      </div>
     </>
   );
 }

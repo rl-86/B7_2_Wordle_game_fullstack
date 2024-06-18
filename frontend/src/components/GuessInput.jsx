@@ -31,7 +31,6 @@ export default function GuessInput({ wordLength, onGuess, isGameActive }) {
 
     const data = await response.json();
     onGuess(inputValue, data.feedback);
-    console.log('data:', data);
     setInputValue('');
   };
 
