@@ -3,19 +3,17 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "start:frontend": "cd frontend && npm run dev",
-    "start:backend": "cd backend && npm run dev",
-    "start": "concurrently --kill-others \"npm run start:frontend\" \"npm run start:backend\"",
     "install:frontend": "cd frontend && npm install",
     "install:backend": "cd backend && npm install",
-    "install": "npm run install:frontend && npm run install:backend"
+    "install": "npm run install:frontend && npm run install:backend",
+    "build": "cd frontend && npm run build",
+    "start": "cd backend && npm start"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "concurrently": "^6.5.1",
     "react-router-dom": "^6.23.1"
   }
 }
