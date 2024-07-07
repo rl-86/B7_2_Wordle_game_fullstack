@@ -1,5 +1,5 @@
 {
-  "name": "b7-wordlegame",
+  "name": "b7-wordlegame-frontend",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -7,10 +7,7 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview",
-    "start:frontend": "cd frontend && npm run dev",
-    "start:backend": "cd backend && npm run dev",
-    "start": "concurrently --kill-others \"npm run start:frontend\" \"npm run start:backend\""
+    "preview": "vite preview"
   },
   "dependencies": {
     "react": "^18.2.0",

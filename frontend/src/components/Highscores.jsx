@@ -25,9 +25,6 @@ function Highscores() {
   return (
     <div>
       <Link to='/'>Back to the Game</Link>
-      <Link to='http://localhost:5080/highscore'>
-        SSR Version of Highscores
-      </Link>
       <h1>Highscores</h1>
       <div>
         <table className='highscores-table'>

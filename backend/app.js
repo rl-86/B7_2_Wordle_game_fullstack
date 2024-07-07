@@ -24,8 +24,11 @@ app.use(
   })
 );
 
+app.use(express.static('./dist'));
+
 app.get('/', async (req, res) => {
-  res.json('Wordle server is upp and running!');
+  const html = await fs.readFile('.dist/index.html');
+  res.type('html').send(html);
 });
 
 app.get('/info', async (req, res) => {
@@ -125,7 +128,5 @@ app.post('/api/feedback', (req, res) => {
 
   res.json({ feedback: feedbackResult });
 });
-
-app.use('/static', express.static('./static'));
 
 export default app;
