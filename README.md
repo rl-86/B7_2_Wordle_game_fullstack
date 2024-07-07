@@ -1,6 +1,6 @@
 # Guess the word game! (Wordle)
 
-### To use the appliction:
+### To use the application:
 
 1. Start MongoDB server
 2. Clone repo
